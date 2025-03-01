@@ -18,7 +18,7 @@ docker-build:
 	docker-compose build
 
 docker-run:
-	docker-compose up
+	docker-compose up -d
 
 docker-stop:
 	docker-compose down

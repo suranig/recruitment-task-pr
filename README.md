@@ -18,34 +18,40 @@ dotnet restore
 dotnet build
 
 # Uruchom API
+```bash
 dotnet run --project src/Articles.API/Articles.API.csproj
+# lub
+make start-local
+```
 
 API będzie dostępne pod adresem:
-- HTTP: http://localhost:5021
+- HTTP: http://localhost:5000
 
 ### Przez Docker (opcjonalnie)
 
-```
-docker-compose up -d
+```bash
+docker-compose up -d --build
+# lub
+make docker-build
 ```
 
 ## Uruchamianie testów
 
 ### Testy jednostkowe
 
-```
+```bash
 dotnet test tests/Articles.UnitTests/Articles.UnitTests.csproj
 ```
 
 ### Testy integracyjne
 
-```
+```bash
 dotnet test tests/Articles.IntegrationTests/Articles.IntegrationTests.csproj
 ```
 
 ### Wszystkie testy
 
-```
+```bash
 dotnet test
 ```
 
@@ -59,7 +65,7 @@ Swagger UI jest dostępny pod adresem:
 ### Sprawdzenie stanu API (Health Check)
 
 ```
-curl -X GET http://localhost:5021/health
+curl -X GET http://localhost:5000health
 
 Oczekiwana odpowiedź:
 ```
