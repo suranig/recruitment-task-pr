@@ -22,7 +22,7 @@ public class HealthCheckControllerTests : IClassFixture<WebApplicationFactory<Pr
         var client = _factory.CreateClient();
 
         // Act
-        var response = await client.GetAsync("/healthcheck");
+        var response = await client.GetAsync("/health");
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<HealthCheckResponse>(content, new JsonSerializerOptions
         {

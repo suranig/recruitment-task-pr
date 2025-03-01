@@ -37,7 +37,7 @@
 │   │   │   │   ├── GetArticle
 │   │   │   │   └── GetArticlesList
 │   │   │   └── Services
-│   │   ├── Class1.cs
+│   │   |
 │   │   ├── Common
 │   │   │   ├── Behaviors
 │   │   │   ├── Exceptions
@@ -57,7 +57,7 @@
 │   │   │       ├── ArticleAuthor.cs
 │   │   │       ├── Article.cs
 │   │   │       └── ArticleTag.cs
-│   │   ├── Class1.cs
+│   │   |
 │   │   ├── Common
 │   │   │   ├── BaseAggregateRoot.cs
 │   │   │   └── BaseEntity.cs
@@ -83,7 +83,7 @@
 │   │       ├── AuthorId.cs
 │   │       └── TagName.cs
 │   └── Infrastructure
-│       ├── Class1.cs
+│       ├
 │       ├── DependencyInjection.cs
 │       ├── Infrastructure.csproj
 │       ├── obj
@@ -130,5 +130,5 @@
         │   ├── UnitTests.csproj.nuget.dgspec.json
         │   ├── UnitTests.csproj.nuget.g.props
         │   └── UnitTests.csproj.nuget.g.targets
-        ├── UnitTest1.cs
+        ├
         └── UnitTests.csproj
