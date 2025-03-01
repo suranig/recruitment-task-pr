@@ -1,0 +1,134 @@
+.
+├── Articles.sln
+├── docker-compose.yml
+├── Dockerfile
+├── LICENSE.MD
+├── Makefile
+├── README.md
+├── src
+│   ├── API
+│   │   ├── API.csproj
+│   │   ├── API.http
+│   │   ├── appsettings.Development.json
+│   │   ├── appsettings.json
+│   │   ├── Controllers
+│   │   │   ├── ArticlesController.cs
+│   │   │   └── HealthCheckController.cs
+│   │   ├── Filters
+│   │   │   └── ApiExceptionFilterAttribute.cs
+│   │   ├── obj
+│   │   │   ├── API.csproj.nuget.dgspec.json
+│   │   │   ├── API.csproj.nuget.g.props
+│   │   │   ├── API.csproj.nuget.g.targets
+│   │   │   ├── project.assets.json
+│   │   │   └── project.nuget.cache
+│   │   ├── Program.cs
+│   │   └── Properties
+│   │       └── launchSettings.json
+│   ├── Application
+│   │   ├── Application.csproj
+│   │   ├── Articles
+│   │   │   ├── Commands
+│   │   │   │   ├── CreateArticle
+│   │   │   │   ├── DeleteArticle
+│   │   │   │   ├── PublishArticle
+│   │   │   │   └── UpdateArticle
+│   │   │   ├── Queries
+│   │   │   │   ├── GetArticle
+│   │   │   │   └── GetArticlesList
+│   │   │   └── Services
+│   │   ├── Class1.cs
+│   │   ├── Common
+│   │   │   ├── Behaviors
+│   │   │   ├── Exceptions
+│   │   │   ├── Interfaces
+│   │   │   └── Models
+│   │   ├── DependencyInjection.cs
+│   │   ├── EventHandlers
+│   │   └── obj
+│   │       ├── Application.csproj.nuget.dgspec.json
+│   │       ├── Application.csproj.nuget.g.props
+│   │       ├── Application.csproj.nuget.g.targets
+│   │       ├── project.assets.json
+│   │       └── project.nuget.cache
+│   ├── Domain
+│   │   ├── Aggregates
+│   │   │   └── ArticleAggregate
+│   │   │       ├── ArticleAuthor.cs
+│   │   │       ├── Article.cs
+│   │   │       └── ArticleTag.cs
+│   │   ├── Class1.cs
+│   │   ├── Common
+│   │   │   ├── BaseAggregateRoot.cs
+│   │   │   └── BaseEntity.cs
+│   │   ├── Domain.csproj
+│   │   ├── Events
+│   │   │   ├── ArticleCreatedEvent.cs
+│   │   │   ├── ArticlePublishedEvent.cs
+│   │   │   └── DomainEvent.cs
+│   │   ├── Exceptions
+│   │   │   └── DomainException.cs
+│   │   ├── Interfaces
+│   │   │   └── IArticleRepository.cs
+│   │   ├── obj
+│   │   │   ├── Domain.csproj.nuget.dgspec.json
+│   │   │   ├── Domain.csproj.nuget.g.props
+│   │   │   ├── Domain.csproj.nuget.g.targets
+│   │   │   ├── project.assets.json
+│   │   │   └── project.nuget.cache
+│   │   ├── Services
+│   │   │   └── ArticleDomainService.cs
+│   │   └── ValueObjects
+│   │       ├── ArticleId.cs
+│   │       ├── AuthorId.cs
+│   │       └── TagName.cs
+│   └── Infrastructure
+│       ├── Class1.cs
+│       ├── DependencyInjection.cs
+│       ├── Infrastructure.csproj
+│       ├── obj
+│       │   ├── Infrastructure.csproj.nuget.dgspec.json
+│       │   ├── Infrastructure.csproj.nuget.g.props
+│       │   ├── Infrastructure.csproj.nuget.g.targets
+│       │   ├── project.assets.json
+│       │   └── project.nuget.cache
+│       ├── Persistence
+│       │   ├── ApplicationDbContext.cs
+│       │   ├── Configurations
+│       │   │   ├── ArticleAuthorConfiguration.cs
+│       │   │   ├── ArticleConfiguration.cs
+│       │   │   └── ArticleTagConfiguration.cs
+│       │   ├── Migrations
+│       │   └── Repositories
+│       │       └── ArticleRepository.cs
+│       └── Services
+│           └── DateTimeService.cs
+└── tests
+    ├── IntegrationTests
+    │   ├── API
+    │   │   └── Controllers
+    │   ├── IntegrationTests.csproj
+    │   ├── obj
+    │   │   ├── IntegrationTests.csproj.nuget.dgspec.json
+    │   │   ├── IntegrationTests.csproj.nuget.g.props
+    │   │   ├── IntegrationTests.csproj.nuget.g.targets
+    │   │   ├── project.assets.json
+    │   │   └── project.nuget.cache
+    │   ├── TestBase.cs
+    │   └── UnitTest1.cs
+    └── UnitTests
+        ├── Application
+        │   └── Articles
+        │       ├── Commands
+        │       └── Queries
+        ├── Domain
+        │   ├── Aggregates
+        │   └── ValueObjects
+        ├── obj
+        │   ├── project.assets.json
+        │   ├── project.nuget.cache
+        │   ├── UnitTests.csproj.nuget.dgspec.json
+        │   ├── UnitTests.csproj.nuget.g.props
+        │   └── UnitTests.csproj.nuget.g.targets
+        ├── UnitTest1.cs
+        └── UnitTests.csproj
