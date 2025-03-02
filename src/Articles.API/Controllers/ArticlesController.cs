@@ -1,6 +1,8 @@
+using Articles.Application.Articles.Commands.AddTagToArticle;
 using Articles.Application.Articles.Commands.CreateArticle;
 using Articles.Application.Articles.Commands.DeleteArticle;
 using Articles.Application.Articles.Commands.PublishArticle;
+using Articles.Application.Articles.Commands.RemoveTagFromArticle;
 using Articles.Application.Articles.Commands.UnpublishArticle;
 using Articles.Application.Articles.Commands.UpdateArticle;
 using Articles.Application.Articles.Queries.GetArticle;
@@ -77,6 +79,31 @@ public class ArticlesController : ControllerBase
     public async Task<ActionResult> Unpublish(Guid id)
     {
         await _mediator.Send(new UnpublishArticleCommand { Id = id });
+        return NoContent();
+    }
+
+    [HttpPost("{id:guid}/tags")]
+    public async Task<ActionResult> AddTag(Guid id, AddTagToArticleCommand command)
+    {
+        if (id != command.ArticleId)
+        {
+            return BadRequest();
+        }
+
+        await _mediator.Send(command);
+        return NoContent();
+    }
+
+    [HttpDelete("{id:guid}/tags/{tagName}")]
+    public async Task<ActionResult> RemoveTag(Guid id, string tagName)
+    {
+        var command = new RemoveTagFromArticleCommand
+        {
+            ArticleId = id,
+            TagName = tagName
+        };
+
+        await _mediator.Send(command);
         return NoContent();
     }
 
