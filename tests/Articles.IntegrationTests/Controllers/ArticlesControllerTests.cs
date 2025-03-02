@@ -33,7 +33,7 @@ public class ArticlesControllerTests : IClassFixture<CustomWebApplicationFactory
             AuthorId = Guid.NewGuid()
         };
 
-        var response = await _client.PostAsJsonAsync("/api/Articles", command);
+        var response = await _client.PostAsJsonAsync("/v1/Articles", command);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var content = await response.Content.ReadFromJsonAsync<CreateArticleResponse>(_jsonOptions);
@@ -52,11 +52,11 @@ public class ArticlesControllerTests : IClassFixture<CustomWebApplicationFactory
             TagName = "test-tag"
         };
 
-        var response = await _client.PostAsJsonAsync($"/api/Articles/{articleId}/tags", command);
+        var response = await _client.PostAsJsonAsync($"/v1/Articles/{articleId}/tags", command);
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var articleResponse = await _client.GetAsync($"/api/Articles/{articleId}");
+        var articleResponse = await _client.GetAsync($"/v1/Articles/{articleId}");
         var article = await articleResponse.Content.ReadFromJsonAsync<ArticleDetailsDto>(_jsonOptions);
         article.Should().NotBeNull();
         article!.Tags.Should().Contain("test-tag");
@@ -73,13 +73,13 @@ public class ArticlesControllerTests : IClassFixture<CustomWebApplicationFactory
             ArticleId = articleId,
             TagName = tagName
         };
-        await _client.PostAsJsonAsync($"/api/Articles/{articleId}/tags", addCommand);
+        await _client.PostAsJsonAsync($"/v1/Articles/{articleId}/tags", addCommand);
 
-        var response = await _client.DeleteAsync($"/api/Articles/{articleId}/tags/{tagName}");
+        var response = await _client.DeleteAsync($"/v1/Articles/{articleId}/tags/{tagName}");
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        var articleResponse = await _client.GetAsync($"/api/Articles/{articleId}");
+        var articleResponse = await _client.GetAsync($"/v1/Articles/{articleId}");
         var article = await articleResponse.Content.ReadFromJsonAsync<ArticleDetailsDto>(_jsonOptions);
         article.Should().NotBeNull();
         article!.Tags.Should().NotContain(tagName);
@@ -90,7 +90,7 @@ public class ArticlesControllerTests : IClassFixture<CustomWebApplicationFactory
     {
         var nonExistentId = Guid.NewGuid();
 
-        var response = await _client.GetAsync($"/api/articles/{nonExistentId}");
+        var response = await _client.GetAsync($"/v1/articles/{nonExistentId}");
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -111,7 +111,7 @@ public class ArticlesControllerTests : IClassFixture<CustomWebApplicationFactory
         _factory._mockArticleRepository.Setup(r => r.GetByIdAsync(It.Is<ArticleId>(id => id.Value == articleId), It.IsAny<CancellationToken>()))
             .ReturnsAsync(article);
 
-        var response = await _client.GetAsync($"/api/articles/{articleId}");
+        var response = await _client.GetAsync($"/v1/articles/{articleId}");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var result = await response.Content.ReadFromJsonAsync<ArticleDetailsDto>();
@@ -130,7 +130,7 @@ public class ArticlesControllerTests : IClassFixture<CustomWebApplicationFactory
             AuthorId = Guid.NewGuid()
         };
 
-        var response = await _client.PostAsJsonAsync("/api/Articles", command);
+        var response = await _client.PostAsJsonAsync("/v1/Articles", command);
         var content = await response.Content.ReadFromJsonAsync<CreateArticleResponse>(_jsonOptions);
         return content!.Id;
     }

@@ -14,7 +14,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Articles.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("v1/[controller]")]
+[Produces("application/json")]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class ArticlesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -24,7 +26,12 @@ public class ArticlesController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Pobiera artykuł o podanym ID
+    /// </summary>
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ArticleDetailsDto>> GetById(Guid id)
     {
         var article = await _mediator.Send(new GetArticleQuery { Id = id });
