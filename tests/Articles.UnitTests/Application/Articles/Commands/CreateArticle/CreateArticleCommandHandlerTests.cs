@@ -21,7 +21,6 @@ public class CreateArticleCommandHandlerTests
     [Fact]
     public async Task Handle_ValidCommand_ShouldCreateAndSaveArticle()
     {
-        // Arrange
         var command = new CreateArticleCommand
         {
             Title = "Testowy artykuł",
@@ -39,10 +38,8 @@ public class CreateArticleCommandHandlerTests
         _mockRepository.Setup(r => r.AddAsync(It.IsAny<Article>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(createdArticle);
 
-        // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
         result.Should().NotBeNull();
         result.Id.Should().NotBeEmpty();
         result.Title.Should().Be(command.Title);
