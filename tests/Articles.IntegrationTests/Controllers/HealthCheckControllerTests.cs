@@ -1,7 +1,5 @@
 using System.Net;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Xunit;
 using Articles.API;
 
 namespace Articles.IntegrationTests.Controllers;
