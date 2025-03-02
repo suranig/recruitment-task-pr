@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(c =>
     { 
         Title = "Articles API", 
         Version = "v1",
-        Description = "API do zarządzania artykułami"
+        Description = "API for managing articles"
     });
     
     var xmlFile = "Articles.API.xml";
@@ -58,7 +58,7 @@ using (var scope = app.Services.CreateScope())
                 }
                 
                 var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogWarning(ex, "Próba {RetryCount}/{MaxRetries} połączenia z bazą danych nie powiodła się. Ponowna próba za 5 sekund...", retryCount, maxRetries);
+                logger.LogWarning(ex, "Attempt {RetryCount}/{MaxRetries} to connect to the database failed. Retrying in 5 seconds...", retryCount, maxRetries);
                 
                 Thread.Sleep(5000);
             }
@@ -67,16 +67,15 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Wystąpił błąd podczas migracji bazy danych.");
+        logger.LogError(ex, "An error occurred during database migration.");
     }
 }
 
-// Włącz Swagger dla wszystkich środowisk
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Articles API V1");
-    c.RoutePrefix = string.Empty; // Ustawia Swagger UI jako stronę główną
+    c.RoutePrefix = string.Empty;
 });
 
 app.UseHttpsRedirection();

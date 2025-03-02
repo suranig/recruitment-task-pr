@@ -1,4 +1,5 @@
 using FluentValidation;
+using Articles.Application.Commons.Constants;
 
 namespace Articles.Application.Articles.Commands.DeleteArticle;
 
@@ -7,6 +8,6 @@ public class DeleteArticleCommandValidator : AbstractValidator<DeleteArticleComm
     public DeleteArticleCommandValidator()
     {
         RuleFor(v => v.Id)
-            .NotEmpty().WithMessage("Identyfikator artykułu jest wymagany");
+            .NotEmpty().WithMessage(ValidationErrorMessages.ArticleIdRequired);
     }
 } 

@@ -27,8 +27,10 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Pobiera artykuł o podanym ID
+    /// Retrieves the article with the specified ID.
     /// </summary>
+    /// <param name="id">Article identifier</param>
+    /// <returns>Article details</returns>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -43,10 +45,10 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Pobiera listę wszystkich artykułów
+    /// Retrieves all articles.
     /// </summary>
-    /// <param name="query">Parametry filtrowania i paginacji</param>
-    /// <returns>Lista artykułów</returns>
+    /// <param name="query">Filtering and pagination parameters</param>
+    /// <returns>Paginated list of articles</returns>
     /// <response code="200">Zwraca listę artykułów</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -57,12 +59,12 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Tworzy nowy artykuł
+    /// Creates a new article.
     /// </summary>
-    /// <param name="command">Dane nowego artykułu</param>
-    /// <returns>Identyfikator utworzonego artykułu</returns>
-    /// <response code="201">Artykuł został utworzony</response>
-    /// <response code="400">Nieprawidłowe dane wejściowe</response>
+    /// <param name="command">New article data</param>
+    /// <returns>Identifier of the created article</returns>
+    /// <response code="201">Article created successfully</response>
+    /// <response code="400">Invalid input data</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -73,14 +75,14 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Aktualizuje istniejący artykuł
+    /// Updates an existing article.
     /// </summary>
-    /// <param name="id">Identyfikator artykułu</param>
-    /// <param name="command">Dane do aktualizacji</param>
-    /// <returns>Brak zawartości</returns>
-    /// <response code="204">Artykuł został zaktualizowany</response>
-    /// <response code="400">Nieprawidłowe dane wejściowe</response>
-    /// <response code="404">Artykuł nie został znaleziony</response>
+    /// <param name="id">Article identifier</param>
+    /// <param name="command">Updated article data</param>
+    /// <returns>No content</returns>
+    /// <response code="204">Article updated successfully</response>
+    /// <response code="400">Invalid input data</response>
+    /// <response code="404">Article not found</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,12 +99,12 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Usuwa artykuł
+    /// Deletes the specified article.
     /// </summary>
-    /// <param name="id">Identyfikator artykułu</param>
-    /// <returns>Brak zawartości</returns>
-    /// <response code="204">Artykuł został usunięty</response>
-    /// <response code="404">Artykuł nie został znaleziony</response>
+    /// <param name="id">Article identifier</param>
+    /// <returns>No content</returns>
+    /// <response code="204">Article deleted successfully</response>
+    /// <response code="404">Article not found</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -113,12 +115,12 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Publikuje artykuł
+    /// Publishes the specified article.
     /// </summary>
-    /// <param name="id">Identyfikator artykułu</param>
-    /// <returns>Brak zawartości</returns>
-    /// <response code="204">Artykuł został opublikowany</response>
-    /// <response code="404">Artykuł nie został znaleziony</response>
+    /// <param name="id">Article identifier</param>
+    /// <returns>No content</returns>
+    /// <response code="204">Article published successfully</response>
+    /// <response code="404">Article not found</response>
     [HttpPost("{id:guid}/publish")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -129,12 +131,12 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Usuwa artykuł
+    /// Unpublishes the specified article.
     /// </summary>
-    /// <param name="id">Identyfikator artykułu</param>
-    /// <returns>Brak zawartości</returns>
-    /// <response code="204">Artykuł został usunięty</response>
-    /// <response code="404">Artykuł nie został znaleziony</response>
+    /// <param name="id">Article identifier</param>
+    /// <returns>No content</returns>
+    /// <response code="204">Article unpublished successfully</response>
+    /// <response code="404">Article not found</response>
     [HttpPost("{id:guid}/unpublish")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -145,13 +147,13 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Dodaje tag do artykułu
+    /// Adds a tag to the specified article.
     /// </summary>
-    /// <param name="id">Identyfikator artykułu</param>
-    /// <param name="command">Dane tagu</param>
-    /// <returns>Brak zawartości</returns>
-    /// <response code="204">Tag został dodany</response>
-    /// <response code="400">Nieprawidłowe dane wejściowe</response>
+    /// <param name="id">Article identifier</param>
+    /// <param name="command">Tag data</param>
+    /// <returns>No content</returns>
+    /// <response code="204">Tag added successfully</response>
+    /// <response code="400">Invalid input data</response>
     [HttpPost("{id:guid}/tags")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -167,13 +169,13 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Usuwa tag z artykułu
+    /// Removes a tag from the specified article.
     /// </summary>
-    /// <param name="id">Identyfikator artykułu</param>
-    /// <param name="tagName">Nazwa tagu</param>
-    /// <returns>Brak zawartości</returns>
-    /// <response code="204">Tag został usunięty</response>
-    /// <response code="400">Nieprawidłowe dane wejściowe</response>
+    /// <param name="id">Article identifier</param>
+    /// <param name="tagName">Name of the tag</param>
+    /// <returns>No content</returns>
+    /// <response code="204">Tag removed successfully</response>
+    /// <response code="400">Invalid input data</response>
     [HttpDelete("{id:guid}/tags/{tagName}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -189,6 +191,10 @@ public class ArticlesController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Returns the list of allowed HTTP methods.
+    /// </summary>
+    /// <returns>Allowed HTTP methods</returns>
     [HttpOptions]
     public ActionResult GetOptions()
     {

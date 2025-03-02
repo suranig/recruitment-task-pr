@@ -1,4 +1,5 @@
 using FluentValidation;
+using Articles.Application.Commons.Constants;
 
 namespace Articles.Application.Articles.Commands.CreateArticle;
 
@@ -7,13 +8,13 @@ public class CreateArticleCommandValidator : AbstractValidator<CreateArticleComm
     public CreateArticleCommandValidator()
     {
         RuleFor(v => v.Title)
-            .NotEmpty().WithMessage("Tytuł jest wymagany")
-            .MaximumLength(200).WithMessage("Tytuł nie może przekraczać 200 znaków");
+            .NotEmpty().WithMessage(ValidationErrorMessages.TitleRequired)
+            .MaximumLength(200).WithMessage(string.Format(ValidationErrorMessages.TitleMaxLength, 200));
 
         RuleFor(v => v.Content)
-            .NotEmpty().WithMessage("Treść jest wymagana");
+            .NotEmpty().WithMessage(ValidationErrorMessages.ContentRequired);
 
         RuleFor(v => v.AuthorId)
-            .NotEmpty().WithMessage("Identyfikator autora jest wymagany");
+            .NotEmpty().WithMessage(ValidationErrorMessages.AuthorIdRequired);
     }
 } 

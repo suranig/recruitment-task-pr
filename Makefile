@@ -35,10 +35,10 @@ start-local: kill-port
 # Dodanie nowej migracji (użycie: make migrations-add name=NazwaMigracji)
 migrations-add:
 	@if [ -z "$(name)" ]; then \
-		echo "Błąd: Brak nazwy migracji. Użyj: make migrations-add name=NazwaMigracji"; \
+		echo "Error: Migration name is missing. Please use: make migrations-add name=NazwaMigracji"; \
 		exit 1; \
 	fi
-	@echo "Dodawanie migracji $(name)..."
+	@echo "Adding migration $(name)..."
 	docker-compose exec api dotnet ef migrations add $(name) --project src/Articles.Infrastructure --startup-project src/Articles.API
 
 # Zastosowanie wszystkich migracji
@@ -49,24 +49,24 @@ migrations-apply:
 # Zastosowanie migracji do konkretnej wersji (użycie: make migrations-apply-to target=NazwaMigracji)
 migrations-apply-to:
 	@if [ -z "$(target)" ]; then \
-		echo "Błąd: Brak nazwy docelowej migracji. Użyj: make migrations-apply-to target=NazwaMigracji"; \
+		echo "Error: Target migration name is missing. Please use: make migrations-apply-to target=NazwaMigracji"; \
 		exit 1; \
 	fi
-	@echo "Stosowanie migracji do $(target)..."
+	@echo "Applying migration up to $(target)..."
 	docker-compose exec api dotnet ef database update $(target) --project src/Articles.Infrastructure --startup-project src/Articles.API
 
 # Cofnięcie ostatniej migracji
 migrations-rollback:
-	@echo "Cofanie ostatniej migracji..."
+	@echo "Rolling back the last migration..."
 	docker-compose exec api dotnet ef database update 0 --project src/Articles.Infrastructure --startup-project src/Articles.API
 
 # Cofnięcie do konkretnej migracji (użycie: make migrations-rollback-to target=NazwaMigracji)
 migrations-rollback-to:
 	@if [ -z "$(target)" ]; then \
-		echo "Błąd: Brak nazwy docelowej migracji. Użyj: make migrations-rollback-to target=NazwaMigracji"; \
+		echo "Error: Target migration name is missing. Please use: make migrations-rollback-to target=NazwaMigracji"; \
 		exit 1; \
 	fi
-	@echo "Cofanie migracji do $(target)..."
+	@echo "Rolling back migrations to $(target)..."
 	docker-compose exec api dotnet ef database update $(target) --project src/Articles.Infrastructure --startup-project src/Articles.API
 
 # Wyświetlenie listy wszystkich migracji
@@ -76,7 +76,7 @@ migrations-list:
 
 # Generowanie skryptu SQL dla migracji (użycie: make migrations-script from=MigracjaA to=MigracjaB)
 migrations-script:
-	@echo "Generowanie skryptu SQL dla migracji..."
+	@echo "Generating SQL script for migrations..."
 	@if [ -z "$(from)" ] && [ -z "$(to)" ]; then \
 		docker-compose exec api dotnet ef migrations script --idempotent --project src/Articles.Infrastructure --startup-project src/Articles.API; \
 	elif [ -z "$(from)" ]; then \
@@ -89,12 +89,12 @@ migrations-script:
 
 # Usunięcie ostatniej migracji (tylko jeśli nie została zastosowana)
 migrations-remove:
-	@echo "Usuwanie ostatniej migracji..."
+	@echo "Removing the last migration..."
 	docker-compose exec api dotnet ef migrations remove --project src/Articles.Infrastructure --startup-project src/Articles.API
 
 # Resetowanie bazy danych (usunięcie wszystkich tabel i zastosowanie migracji od nowa)
 migrations-reset:
-	@echo "Resetowanie bazy danych..."
+	@echo "Resetting the database..."
 	docker-compose exec api dotnet ef database drop --force --project src/Articles.Infrastructure --startup-project src/Articles.API
 	docker-compose exec api dotnet ef database update --project src/Articles.Infrastructure --startup-project src/Articles.API
 

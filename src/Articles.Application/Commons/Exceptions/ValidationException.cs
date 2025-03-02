@@ -5,7 +5,7 @@ namespace Articles.Application.Commons.Exceptions;
 public class ValidationException : Exception
 {
     public ValidationException()
-        : base("Wystąpił jeden lub więcej błędów walidacji.")
+        : base("One or more validation errors occurred.")
     {
         Errors = new Dictionary<string, string[]>();
     }
