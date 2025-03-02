@@ -1,6 +1,10 @@
 using Articles.API.Controllers;
+using Articles.Application.Articles.Commands.AddTagToArticle;
 using Articles.Application.Articles.Commands.CreateArticle;
 using Articles.Application.Articles.Commands.DeleteArticle;
+using Articles.Application.Articles.Commands.PublishArticle;
+using Articles.Application.Articles.Commands.RemoveTagFromArticle;
+using Articles.Application.Articles.Commands.UnpublishArticle;
 using Articles.Application.Articles.Commands.UpdateArticle;
 using Articles.Application.Articles.Queries.GetArticle;
 using Articles.Application.Articles.Queries.GetArticlesList;
@@ -10,8 +14,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Microsoft.AspNetCore.Http;
-using Articles.Application.Articles.Commands.PublishArticle;
-using Articles.Application.Articles.Commands.UnpublishArticle;
 
 namespace Articles.UnitTests.API.Controllers;
 
@@ -171,5 +173,52 @@ public class ArticlesControllerTests
 
         result.Should().BeOfType<NoContentResult>();
         _mockMediator.Verify(m => m.Send(It.Is<UnpublishArticleCommand>(c => c.Id == articleId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task AddTag_ValidCommand_ReturnsNoContent()
+    {
+        var articleId = Guid.NewGuid();
+        var command = new AddTagToArticleCommand
+        {
+            ArticleId = articleId,
+            TagName = "test-tag"
+        };
+
+        var result = await _controller.AddTag(articleId, command);
+
+        result.Should().BeOfType<NoContentResult>();
+        _mockMediator.Verify(m => m.Send(command, It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task AddTag_MismatchedIds_ReturnsBadRequest()
+    {
+        var articleId = Guid.NewGuid();
+        var command = new AddTagToArticleCommand
+        {
+            ArticleId = Guid.NewGuid(),
+            TagName = "test-tag"
+        };
+
+        var result = await _controller.AddTag(articleId, command);
+
+        result.Should().BeOfType<BadRequestResult>();
+        _mockMediator.Verify(m => m.Send(It.IsAny<AddTagToArticleCommand>(), It.IsAny<CancellationToken>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task RemoveTag_ExistingTag_ReturnsNoContent()
+    {
+        var articleId = Guid.NewGuid();
+        var tagName = "test-tag";
+
+        var result = await _controller.RemoveTag(articleId, tagName);
+
+        result.Should().BeOfType<NoContentResult>();
+        _mockMediator.Verify(m => m.Send(
+            It.Is<RemoveTagFromArticleCommand>(c => c.ArticleId == articleId && c.TagName == tagName), 
+            It.IsAny<CancellationToken>()), 
+            Times.Once);
     }
 } 
