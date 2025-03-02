@@ -12,16 +12,20 @@ Projekt API do zarządzania artykułami, implementujący wzorzec Clean Architect
 ### Przez .NET CLI
 
 # Przywróć zależności
+```bash
 dotnet restore
+```
 
 # Zbuduj projekt
+```bash
 dotnet build
+```
 
 # Uruchom API
 ```bash
-dotnet run --project src/Articles.API/Articles.API.csproj
+dotnet run --project src/Articles.API/Articles.API.csproj --urls "http://localhost:5000" (bez bazy danych i migracji)
 # lub
-make start-local
+make docker-run (z bazą danych i migracjami)
 ```
 
 API będzie dostępne pod adresem:
@@ -58,6 +62,7 @@ make test
 ```bash
 make coverage
 ```
+```text
 
 Aktualne pokrycie kodu:
 Podsumowanie pokrycia (Text Summary):
@@ -89,7 +94,7 @@ Articles.API 96.8%
 Articles.Application 82%
 Articles.Domain 78.6%
 Articles.Infrastructure 46.4%
-  
+```
 
 ## Dokumentacja API
 
