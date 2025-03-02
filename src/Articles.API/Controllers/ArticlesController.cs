@@ -1,5 +1,7 @@
 using Articles.Application.Articles.Commands.CreateArticle;
 using Articles.Application.Articles.Commands.DeleteArticle;
+using Articles.Application.Articles.Commands.PublishArticle;
+using Articles.Application.Articles.Commands.UnpublishArticle;
 using Articles.Application.Articles.Commands.UpdateArticle;
 using Articles.Application.Articles.Queries.GetArticle;
 using Articles.Application.Articles.Queries.GetArticlesList;
@@ -61,6 +63,20 @@ public class ArticlesController : ControllerBase
     public async Task<ActionResult> Delete(Guid id)
     {
         await _mediator.Send(new DeleteArticleCommand { Id = id });
+        return NoContent();
+    }
+
+    [HttpPost("{id:guid}/publish")]
+    public async Task<ActionResult> Publish(Guid id)
+    {
+        await _mediator.Send(new PublishArticleCommand { Id = id });
+        return NoContent();
+    }
+
+    [HttpPost("{id:guid}/unpublish")]
+    public async Task<ActionResult> Unpublish(Guid id)
+    {
+        await _mediator.Send(new UnpublishArticleCommand { Id = id });
         return NoContent();
     }
 

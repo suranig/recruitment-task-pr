@@ -10,6 +10,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Microsoft.AspNetCore.Http;
+using Articles.Application.Articles.Commands.PublishArticle;
+using Articles.Application.Articles.Commands.UnpublishArticle;
 
 namespace Articles.UnitTests.API.Controllers;
 
@@ -150,5 +152,27 @@ public class ArticlesControllerTests
         result.Should().BeOfType<OkResult>();
         httpContext.Response.Headers.Should().ContainKey("Allow")
             .WhoseValue.Should().BeEquivalentTo(new[] { "GET, POST, PUT, DELETE, OPTIONS" });
+    }
+
+    [Fact]
+    public async Task Publish_ExistingArticle_ReturnsNoContent()
+    {
+        var articleId = Guid.NewGuid();
+
+        var result = await _controller.Publish(articleId);
+
+        result.Should().BeOfType<NoContentResult>();
+        _mockMediator.Verify(m => m.Send(It.Is<PublishArticleCommand>(c => c.Id == articleId), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Unpublish_ExistingArticle_ReturnsNoContent()
+    {
+        var articleId = Guid.NewGuid();
+
+        var result = await _controller.Unpublish(articleId);
+
+        result.Should().BeOfType<NoContentResult>();
+        _mockMediator.Verify(m => m.Send(It.Is<UnpublishArticleCommand>(c => c.Id == articleId), It.IsAny<CancellationToken>()), Times.Once);
     }
 } 
