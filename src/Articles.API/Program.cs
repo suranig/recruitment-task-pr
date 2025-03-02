@@ -32,14 +32,37 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Zastosuj migracje przy starcie aplikacji
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        context.Database.Migrate();
+        
+        var retryCount = 0;
+        const int maxRetries = 10;
+        
+        while (retryCount < maxRetries)
+        {
+            try
+            {
+                context.Database.Migrate();
+                break;
+            }
+            catch (Exception ex)
+            {
+                retryCount++;
+                if (retryCount >= maxRetries)
+                {
+                    throw;
+                }
+                
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogWarning(ex, "Próba {RetryCount}/{MaxRetries} połączenia z bazą danych nie powiodła się. Ponowna próba za 5 sekund...", retryCount, maxRetries);
+                
+                Thread.Sleep(5000);
+            }
+        }
     }
     catch (Exception ex)
     {
