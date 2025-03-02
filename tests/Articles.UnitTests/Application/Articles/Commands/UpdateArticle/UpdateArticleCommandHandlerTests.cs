@@ -22,7 +22,6 @@ public class UpdateArticleCommandHandlerTests
     [Fact]
     public async Task Handle_ExistingArticle_ShouldUpdateAndSaveArticle()
     {
-        // Arrange
         var articleId = Guid.NewGuid();
         var command = new UpdateArticleCommand
         {
