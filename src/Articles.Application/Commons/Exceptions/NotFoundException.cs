@@ -18,7 +18,7 @@ public class NotFoundException : Exception
     }
 
     public NotFoundException(string name, object key)
-        : base($"Encja \"{name}\" ({key}) nie została znaleziona.")
+        : base($"Entity \"{name}\" ({key}) has not found.")
     {
     }
 }

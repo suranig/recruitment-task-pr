@@ -99,7 +99,7 @@ Articles.Infrastructure 46.4%
 ## Dokumentacja API
 
 Swagger UI jest dostępny pod adresem:
-- http://localhost:5000/swagger
+- http://localhost:5000/index.html
 
 
 ## Migracje
