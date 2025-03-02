@@ -30,9 +30,10 @@ API będzie dostępne pod adresem:
 ### Przez Docker (opcjonalnie)
 
 ```bash
-docker-compose up -d --build
+# przy pierwszym uruchomieniu
+make docker-first-run # uruchamia kontenery i stosuje migracje
 # lub
-make docker-build
+make docker-build && make docker-run
 ```
 
 ## Uruchamianie testów
@@ -75,12 +76,24 @@ Oczekiwana odpowiedź:
 }
 ```
 
-## Struktura projektu
+## Migracje
 
-- **src/Articles.API** - Projekt API, zawierający kontrolery i konfigurację
-- **src/Articles.Application** - Logika aplikacji, serwisy, handlery komend i zapytań
-- **src/Articles.Domain** - Modele domeny, encje, wartości, reguły biznesowe
-- **src/Articles.Infrastructure** - Implementacje infrastruktury (baza danych, zewnętrzne API)
-- **tests/Articles.UnitTests** - Testy jednostkowe
-- **tests/Articles.IntegrationTests** - Testy integracyjne
+1. **Dodanie nowej migracji po zmianie modelu**:
+   ```bash
+   make migrations-add name=NazwaMigracji
+   ```
 
+2. **Zastosowanie migracji w środowisku deweloperskim**:
+   ```bash
+   make migrations-apply
+   ```
+
+3. **Cofnięcie problematycznej migracji**:
+   ```bash
+   make migrations-rollback-to target=PoprzedniaMigracja
+   ```
+
+4. **Generowanie skryptu SQL dla środowiska produkcyjnego**:
+   ```bash
+   make migrations-script > migration.sql
+   ```

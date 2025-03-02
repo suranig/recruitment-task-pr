@@ -1,11 +1,23 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
-
-COPY . .
+WORKDIR /src
+COPY ["Articles.sln", "./"]
+COPY ["src/Articles.API/Articles.API.csproj", "src/Articles.API/"]
+COPY ["src/Articles.Application/Articles.Application.csproj", "src/Articles.Application/"]
+COPY ["src/Articles.Domain/Articles.Domain.csproj", "src/Articles.Domain/"]
+COPY ["src/Articles.Infrastructure/Articles.Infrastructure.csproj", "src/Articles.Infrastructure/"]
 RUN dotnet restore
-RUN dotnet publish src/Articles.API -c Release -o out
+COPY . .
+WORKDIR "/src/src/Articles.API"
+RUN dotnet build "Articles.API.csproj" -c Release -o /app/build
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM build AS publish
+RUN dotnet publish "Articles.API.csproj" -c Release -o /app/publish
+
+FROM base AS final
 WORKDIR /app
-COPY --from=build /app/out .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Articles.API.dll"]
