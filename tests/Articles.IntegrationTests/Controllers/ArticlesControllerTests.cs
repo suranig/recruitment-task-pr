@@ -1,19 +1,13 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
 using Articles.Application.Articles.Commands.AddTagToArticle;
 using Articles.Application.Articles.Commands.CreateArticle;
-using Articles.Application.Articles.Commands.RemoveTagFromArticle;
 using Articles.Application.Articles.Queries.GetArticle;
 using Articles.Domain.Aggregates.ArticleAggregate;
-using Articles.Domain.Interfaces;
 using Articles.Domain.ValueObjects;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Xunit;
 
 namespace Articles.IntegrationTests.Controllers;
 
