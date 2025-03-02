@@ -48,15 +48,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-if (app.Environment.IsDevelopment())
+// Włącz Swagger dla wszystkich środowisk
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Articles API V1");
-        c.RoutePrefix = "swagger";
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Articles API V1");
+    c.RoutePrefix = string.Empty; // Ustawia Swagger UI jako stronę główną
+});
 
 app.UseHttpsRedirection();
 app.UseRouting();
