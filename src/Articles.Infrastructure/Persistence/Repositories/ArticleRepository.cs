@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Articles.Domain.Aggregates.ArticleAggregate;
 using Articles.Domain.Interfaces;
 using Articles.Domain.ValueObjects;
@@ -11,39 +7,29 @@ namespace Articles.Infrastructure.Persistence.Repositories;
 
 public class ArticleRepository : IArticleRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _context;
 
-    public ArticleRepository(ApplicationDbContext dbContext)
+    public ArticleRepository(ApplicationDbContext context)
     {
-        _dbContext = dbContext;
+        _context = context;
     }
 
     public async Task<Article?> GetByIdAsync(ArticleId id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Articles
+        return await _context.Articles
             .Include(a => a.Tags)
+            .Include(a => a.Authors)
             .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
-    public async Task<(List<Article> Items, int TotalCount)> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    public async Task<List<Article>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        var query = _dbContext.Articles
-            .Include(a => a.Tags)
-            .AsQueryable();
-
-        var totalCount = await query.CountAsync(cancellationToken);
-        
-        var items = await query
-            .Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        return (items, totalCount);
+        return await _context.Articles.ToListAsync(cancellationToken);
     }
 
     public async Task<List<Article>> GetByTagAsync(TagName tagName, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Articles
+        return await _context.Articles
             .Include(a => a.Authors)
             .Include(a => a.Tags)
             .Where(a => a.Tags.Any(t => t.Name == tagName))
@@ -52,24 +38,44 @@ public class ArticleRepository : IArticleRepository
 
     public async Task<Article> AddAsync(Article article, CancellationToken cancellationToken = default)
     {
-        _dbContext.Articles.Add(article);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _context.Articles.AddAsync(article, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
         return article;
     }
 
     public async Task UpdateAsync(Article article, CancellationToken cancellationToken = default)
     {
-        _dbContext.Articles.Update(article);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        _context.Articles.Update(article);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(Article article, CancellationToken cancellationToken = default)
+    {
+        _context.Articles.Remove(article);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<(List<Article> Items, int TotalCount)> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
+    {
+        var totalCount = await _context.Articles.CountAsync(cancellationToken);
+        
+        var items = await _context.Articles
+            .Include(a => a.Tags)
+            .Include(a => a.Authors)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+            
+        return (Items: items, TotalCount: totalCount);
     }
 
     public async Task DeleteAsync(ArticleId id, CancellationToken cancellationToken = default)
     {
-        var article = await _dbContext.Articles.FindAsync(new object[] { id }, cancellationToken);
+        var article = await _context.Articles.FindAsync(new object[] { id }, cancellationToken);
         if (article != null)
         {
-            _dbContext.Articles.Remove(article);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            _context.Articles.Remove(article);
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 } 

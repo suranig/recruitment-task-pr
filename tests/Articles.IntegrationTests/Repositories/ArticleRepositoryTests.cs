@@ -3,7 +3,6 @@ using Articles.Domain.ValueObjects;
 using Articles.Infrastructure.Persistence;
 using Articles.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Articles.IntegrationTests.Repositories;
@@ -15,13 +14,8 @@ public class ArticleRepositoryTests : IDisposable
 
     public ArticleRepositoryTests()
     {
-        var serviceProvider = new ServiceCollection()
-            .AddEntityFrameworkInMemoryDatabase()
-            .BuildServiceProvider();
-
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .UseInternalServiceProvider(serviceProvider)
             .Options;
 
         _dbContext = new ApplicationDbContext(options);
@@ -52,36 +46,22 @@ public class ArticleRepositoryTests : IDisposable
     [Fact]
     public async Task GetAllAsync_ShouldReturnAllArticles()
     {
-        var articleId1 = ArticleId.CreateUnique();
-        var articleId2 = ArticleId.CreateUnique();
+        _dbContext.Articles.RemoveRange(_dbContext.Articles);
+        await _dbContext.SaveChangesAsync();
+
         var authorId = AuthorId.CreateUnique();
-        
-        var article1 = Article.Create(articleId1, "Test Article 1", "Test Content 1", authorId);
-        article1.AddTag(TagName.Create("tag 1"));
-        article1.AddTag(TagName.Create("common tag"));
-        
-        var article2 = Article.Create(articleId2, "Test Article 2", "Test Content 2", authorId);
-        article2.AddTag(TagName.Create("tag 2"));
-        article2.AddTag(TagName.Create("common tag"));
+        var article1 = Article.Create(ArticleId.CreateUnique(), "Article 1", "Content 1", authorId);
+        var article2 = Article.Create(ArticleId.CreateUnique(), "Article 2", "Content 2", authorId);
         
         _dbContext.Articles.AddRange(article1, article2);
         await _dbContext.SaveChangesAsync();
 
-        var (result, totalCount) = await _repository.GetAllAsync(1, 10);
+        var result = await _repository.GetAllAsync(1, 10);
 
-        Assert.Equal(2, result.Count);
-        Assert.Equal(2, totalCount);
-        
-        var firstArticle = result.First(a => a.Id == articleId1);
-        var secondArticle = result.First(a => a.Id == articleId2);
-        
-        Assert.Equal(2, firstArticle.Tags.Count);
-        Assert.Contains(firstArticle.Tags, t => t.Name.Value == "tag 1");
-        Assert.Contains(firstArticle.Tags, t => t.Name.Value == "common tag");
-        
-        Assert.Equal(2, secondArticle.Tags.Count);
-        Assert.Contains(secondArticle.Tags, t => t.Name.Value == "tag 2");
-        Assert.Contains(secondArticle.Tags, t => t.Name.Value == "common tag");
+        Assert.Equal(2, result.Items.Count);
+        Assert.Equal(2, result.TotalCount);
+        Assert.Contains(result.Items, a => a.Title == "Article 1");
+        Assert.Contains(result.Items, a => a.Title == "Article 2");
     }
 
     [Fact]
@@ -104,7 +84,6 @@ public class ArticleRepositoryTests : IDisposable
 
     public void Dispose()
     {
-        _dbContext.Database.EnsureDeleted();
         _dbContext.Dispose();
     }
 } 

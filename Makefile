@@ -1,8 +1,8 @@
 # Makefile
-.PHONY: build run test clean docker-build docker-run start-local kill-port migrations-add migrations-apply migrations-rollback migrations-list migrations-script docker-first-run
+.PHONY: build run test clean docker-build docker-run start-local kill-port migrations-add migrations-apply migrations-rollback migrations-list migrations-script docker-first-run docker-clean
 
 build:
-	dotnet build
+	docker-compose build
 
 run:
 	dotnet run --project src/Articles.API
@@ -100,5 +100,27 @@ migrations-reset:
 
 # Pierwsze uruchomienie za pomocą skryptWu
 docker-first-run:
-	@chmod +x scripts/init-db.sh
-	@./scripts/init-db.sh
+	@echo "Pierwsze uruchomienie projektu..."
+	chmod +x scripts/init-db.sh
+	./scripts/init-db.sh
+
+docker-clean:
+	@echo "Czyszczenie środowiska Docker..."
+	docker compose down -v
+	docker system prune -f
+
+.PHONY: up
+up:
+	docker-compose up -d
+
+.PHONY: down
+down:
+	docker-compose down
+
+.PHONY: logs
+logs:
+	docker-compose logs -f
+
+.PHONY: init-db
+init-db:
+	docker-compose exec api dotnet ef database update --project src/Articles.Infrastructure --startup-project src/Articles.API

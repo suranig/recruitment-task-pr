@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   api:
+    container_name: articles-api
     build: .
     ports:
       - "5000:80"
@@ -8,22 +9,37 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=db;Database=ArticlesDb;User=sa;Password=LocalDB123@;TrustServerCertificate=True;
-    depends_on:
-      - db
     networks:
       - articles-network
 
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: articles-db
+    command: 
+      - /opt/mssql/bin/sqlservr
+      - -T902
+      - -T3659
+      - -T5101
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=LocalDB123@
+      - MSSQL_PID=Express
+      # Opcjonalnie – usuń te zmienne, jeśli nie są niezbędne
+      - MSSQL_SUPPRESS_SYSTEM_UPGRADES=1
+      - MSSQL_MEMORY_LIMIT_MB=2048
+      - MSSQL_DO_NOT_UPGRADE=1
     ports:
       - "1433:1433"
     volumes:
       - sqlserver-data:/var/opt/mssql
     networks:
       - articles-network
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "LocalDB123@" -d master -Q "SELECT 1"
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
 
 networks:
   articles-network:
@@ -31,3 +47,4 @@ networks:
 
 volumes:
   sqlserver-data:
+    driver: local
