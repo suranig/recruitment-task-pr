@@ -1,5 +1,5 @@
 # Makefile
-.PHONY: build run test clean docker-build docker-run start-local kill-port migrations-add migrations-apply migrations-rollback migrations-list migrations-script docker-first-run docker-clean
+.PHONY: build run test clean docker-build docker-run start-local kill-port migrations-add migrations-apply migrations-rollback migrations-list migrations-script docker-clean test-coverage coverage-report coverage
 
 build:
 	docker-compose build
@@ -98,11 +98,6 @@ migrations-reset:
 	docker-compose exec api dotnet ef database drop --force --project src/Articles.Infrastructure --startup-project src/Articles.API
 	docker-compose exec api dotnet ef database update --project src/Articles.Infrastructure --startup-project src/Articles.API
 
-# Pierwsze uruchomienie za pomocą skryptWu
-docker-first-run:
-	@echo "Pierwsze uruchomienie projektu..."
-	chmod +x scripts/init-db.sh
-	./scripts/init-db.sh
 
 docker-clean:
 	@echo "Czyszczenie środowiska Docker..."
@@ -124,3 +119,19 @@ logs:
 .PHONY: init-db
 init-db:
 	docker-compose exec api dotnet ef database update --project src/Articles.Infrastructure --startup-project src/Articles.API
+
+# Uruchamia testy z włączonym zbieraniem danych pokrycia
+test-coverage:
+	dotnet test tests/Articles.UnitTests/Articles.UnitTests.csproj --collect:"XPlat Code Coverage"
+	dotnet test tests/Articles.IntegrationTests/Articles.IntegrationTests.csproj --collect:"XPlat Code Coverage"
+
+# Generuje raport pokrycia przy użyciu narzędzia ReportGenerator
+coverage-report:
+	# Generujemy raporty w formatach HTML, HTML Summary oraz Text Summary
+	$(HOME)/.dotnet/tools/reportgenerator "-reports:./**/TestResults/*/coverage.cobertura.xml" "-targetdir:./TestResults/CoverageReport" "-reporttypes:Html;HtmlSummary;TextSummary"
+	@echo "Raport pokrycia kodu dostępny w: ./TestResults/CoverageReport/index.html"
+	@echo "Podsumowanie pokrycia (Text Summary):"
+	@cat ./TestResults/CoverageReport/Summary.txt
+
+# Cel łączący uruchomienie testów i generowanie raportu
+coverage: test-coverage coverage-report
