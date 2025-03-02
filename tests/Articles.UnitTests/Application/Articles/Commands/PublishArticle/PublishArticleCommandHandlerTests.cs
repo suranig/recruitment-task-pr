@@ -22,7 +22,6 @@ public class PublishArticleCommandHandlerTests
     [Fact]
     public async Task Handle_ExistingArticle_ShouldPublishArticle()
     {
-        // Arrange
         var articleId = Guid.NewGuid();
         var command = new PublishArticleCommand { Id = articleId };
 

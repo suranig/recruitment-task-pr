@@ -138,17 +138,14 @@ public class ArticlesControllerTests
     [Fact]
     public void GetOptions_ReturnsOkWithAllowHeader()
     {
-        // Arrange
         var httpContext = new DefaultHttpContext();
         _controller.ControllerContext = new ControllerContext
         {
             HttpContext = httpContext
         };
 
-        // Act
         var result = _controller.GetOptions();
 
-        // Assert
         result.Should().BeOfType<OkResult>();
         httpContext.Response.Headers.Should().ContainKey("Allow")
             .WhoseValue.Should().BeEquivalentTo(new[] { "GET, POST, PUT, DELETE, OPTIONS" });
