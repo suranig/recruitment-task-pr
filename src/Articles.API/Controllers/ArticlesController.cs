@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Articles.API.Controllers;
 
 [ApiController]
-[Route("v1/[controller]")]
+[Route("v1/articles")]
 [Produces("application/json")]
 [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 public class ArticlesController : ControllerBase
@@ -27,7 +27,7 @@ public class ArticlesController : ControllerBase
     }
 
     /// <summary>
-    /// Retrieves the article with the specified ID.
+    /// Retrieves the publsihed article with the specified ID.
     /// </summary>
     /// <param name="id">Article identifier</param>
     /// <returns>Article details</returns>
