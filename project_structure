@@ -38,7 +38,7 @@
 │   │   │   │   └── GetArticlesList
 │   │   │   └── Services
 │   │   |
-│   │   ├── Common
+│   │   ├── Commons
 │   │   │   ├── Behaviors
 │   │   │   ├── Exceptions
 │   │   │   ├── Interfaces
@@ -58,7 +58,7 @@
 │   │   │       ├── Article.cs
 │   │   │       └── ArticleTag.cs
 │   │   |
-│   │   ├── Common
+│   │   ├── Commons
 │   │   │   ├── BaseAggregateRoot.cs
 │   │   │   └── BaseEntity.cs
 │   │   ├── Domain.csproj
@@ -115,7 +115,7 @@
     │   │   ├── project.assets.json
     │   │   └── project.nuget.cache
     │   ├── TestBase.cs
-    │   └── UnitTest1.cs
+    │   └
     └── UnitTests
         ├── Application
         │   └── Articles

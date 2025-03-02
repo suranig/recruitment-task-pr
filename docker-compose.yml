@@ -7,3 +7,27 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=db;Database=ArticlesDb;User=sa;Password=LocalDB123@;TrustServerCertificate=True;
+    depends_on:
+      - db
+    networks:
+      - articles-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=LocalDB123@
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - articles-network
+
+networks:
+  articles-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:

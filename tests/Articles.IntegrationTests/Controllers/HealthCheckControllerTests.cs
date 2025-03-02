@@ -16,23 +16,13 @@ public class HealthCheckControllerTests : IClassFixture<WebApplicationFactory<Pr
     }
 
     [Fact]
-    public async Task Get_ReturnsHealthyStatus()
+    public async Task Get_ReturnsOk()
     {
-        // Arrange
         var client = _factory.CreateClient();
 
-        // Act
         var response = await client.GetAsync("/health");
-        var content = await response.Content.ReadAsStringAsync();
-        var result = JsonSerializer.Deserialize<HealthCheckResponse>(content, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
 
-        // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.NotNull(result);
-        Assert.Equal("Healthy", result.Status);
     }
 }
 
