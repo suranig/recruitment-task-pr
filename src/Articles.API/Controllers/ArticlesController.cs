@@ -49,7 +49,7 @@ public class ArticlesController : ControllerBase
     /// </summary>
     /// <param name="query">Filtering and pagination parameters</param>
     /// <returns>Paginated list of articles</returns>
-    /// <response code="200">Zwraca listę artykułów</response>
+    /// <response code="200">Returns the list of articles</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<PaginatedList<ArticleListItemDto>>> GetList([FromQuery] GetArticlesListQuery query)

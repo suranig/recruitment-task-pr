@@ -19,6 +19,7 @@ docker-build:
 
 docker-run:
 	docker-compose up -d
+	@echo "Aplikacja została uruchomiona w kontenerze Docker. http://localhost:5000/index.html"
 
 docker-stop:
 	docker-compose down
